@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "mixon",
+  "version": "${version}",
+
+  "name": "Mixon",
+  "description": "Dynamic mod injector and fabric.mod.json mixin system for Fabric",
+  "authors": [
+    "Arc'blroth"
+  ],
+
+  "license": "GPL-3.0",
+  "icon": "assets/mixon/icon.png",
+
+  "environment": "*",
+
+  "entrypoints": {
+    "mixon:prepreprelaunch": [
+      "ai.arcblroth.mixon.example.MITExceptionFixerUpper"
+    ]
+  },
+
+  "languageAdapters": {
+    "ai.arcblroth.mixon": "ai.arcblroth.mixon.MixonFauxLanguageAdapter"
+  },
+
+  "depends": {
+    "fabricloader": ">=0.7.8",
+    "minecraft": "*"
+  }
+
+}

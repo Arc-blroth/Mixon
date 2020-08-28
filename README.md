@@ -2,6 +2,13 @@
 
 A dynamic mod injector and fabric.mod.json mixin system
 
+# Usage
+
+Add the "mixon:prepreprelaunch" entrypoint to your fabric.mod.json,
+then use the methods in [MixonModInjector](src/main/java/ai/arcblroth/mixon/api/MixonModInjector.java).
+For an example,
+see the [MITExceptionFixerUpper](src/main/java/ai/arcblroth/mixon/example/MITExceptionFixerUpper.java) class.
+
 ### Notes on Licensing
 
 The classes MixonBuiltinMetadataWrapper, MixonModResolver, and MixonClasspathModCandidateFinder

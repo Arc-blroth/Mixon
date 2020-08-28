@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * A LoaderModMetadata implementation that defers to a parent LoaderModMetadata by default.
+ */
 public abstract class LoaderModMetadataWrapper implements LoaderModMetadata  {
 
     private final LoaderModMetadata parent;

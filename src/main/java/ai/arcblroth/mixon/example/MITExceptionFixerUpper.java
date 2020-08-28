@@ -3,7 +3,6 @@ package ai.arcblroth.mixon.example;
 import ai.arcblroth.mixon.api.LoaderModMetadataWrapper;
 import ai.arcblroth.mixon.api.MixonModInjector;
 import ai.arcblroth.mixon.api.PrePrePreLaunch;
-import net.fabricmc.loader.discovery.ModCandidate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,15 +15,16 @@ import java.util.stream.Collectors;
 
 public class MITExceptionFixerUpper implements PrePrePreLaunch {
 
-    private static final String mitExceptionUrl = "https://github.com/Maowcraft/MITException/releases/download/1.0.0/mitexception-1.0.0.jar";
-    private static final String mitExceptionLocalFile = "mitexception-1.0.0.jar";
+    public static final boolean ENABLE = false;
 
     @Override
     public void onPrePrePreLaunch() {
+        if(!ENABLE) return;
+
         try {
-            File localJar = new File(mitExceptionLocalFile);
+            File localJar = new File("mitexception-1.0.0.jar");
             if(!localJar.exists()) {
-                final URL url = new URL(mitExceptionUrl);
+                final URL url = new URL("https://github.com/Maowcraft/MITException/releases/download/1.0.0/mitexception-1.0.0.jar");
                 ReadableByteChannel rbc = Channels.newChannel(url.openStream());
                 FileOutputStream fos = new FileOutputStream(localJar);
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
@@ -42,6 +42,14 @@ public class MITExceptionFixerUpper implements PrePrePreLaunch {
                         return super.getLicense().stream()
                                 .map(s -> s.toLowerCase().equals("mit") ? "mit " : s)
                                 .collect(Collectors.toList());
+                    }
+                    @Override
+                    public String getDescription() {
+                        if(this.getId().equals("mitexception")) {
+                            return "try {\n" + super.getDescription() + "\n} catch (MITException e) {\n    // Mwahaha\n}";
+                        } else {
+                            return super.getDescription();
+                        }
                     }
                 };
             } else {

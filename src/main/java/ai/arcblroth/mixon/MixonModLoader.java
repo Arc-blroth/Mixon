@@ -9,7 +9,6 @@ import net.fabricmc.loader.discovery.*;
 import net.fabricmc.loader.gui.FabricGuiEntry;
 import net.fabricmc.loader.launch.common.FabricLauncherBase;
 import net.fabricmc.loader.metadata.LoaderModMetadata;
-import net.fabricmc.loader.metadata.ModMetadataParser;
 import net.fabricmc.loader.util.DefaultLanguageAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

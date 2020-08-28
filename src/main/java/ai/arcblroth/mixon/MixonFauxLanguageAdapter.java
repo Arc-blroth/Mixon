@@ -3,6 +3,7 @@ package ai.arcblroth.mixon;
 import net.fabricmc.loader.api.LanguageAdapter;
 import net.fabricmc.loader.api.LanguageAdapterException;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.gui.FabricGuiEntry;
 import net.fabricmc.loader.util.DefaultLanguageAdapter;
 
 public class MixonFauxLanguageAdapter implements LanguageAdapter {
@@ -10,7 +11,11 @@ public class MixonFauxLanguageAdapter implements LanguageAdapter {
     private static final String MOD_METADATA_PARSER_CLASS_NAME = "net.fabricmc.loader.metadata.ModMetadataParser";
 
     static {
-        MixonModLoader.INSTANCE.onPrePrePreLaunch();
+        try {
+            MixonModLoader.INSTANCE.onPrePrePreLaunch();
+        } catch (Throwable t) {
+            FabricGuiEntry.displayCriticalError(new FatalMixonException("Fatal mixon error!", t), true);
+        }
     }
 
     @Override

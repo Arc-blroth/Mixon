@@ -1,7 +1,6 @@
 package ai.arcblroth.mixon;
 
 import ai.arcblroth.mixon.api.MixonModInjector;
-import net.fabricmc.loader.discovery.ModCandidate;
 import net.fabricmc.loader.metadata.LoaderModMetadata;
 import net.fabricmc.loader.util.UrlUtil;
 

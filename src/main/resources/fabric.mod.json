@@ -31,7 +31,7 @@
 
   "custom": {
     "gfh:prePrePreLaunch": [
-      "al.arcblroth.mixon.MixonPrePrePreLaunch"
+      "ai.arcblroth.mixon.MixonPrePrePreLaunch"
     ]
   }
 }

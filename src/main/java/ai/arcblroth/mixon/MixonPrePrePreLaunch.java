@@ -1,6 +1,5 @@
 package ai.arcblroth.mixon;
 
-import java.util.ListIterator;
 import net.devtech.grossfabrichacks.instrumentation.InstrumentationApi;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -17,10 +16,13 @@ import org.spongepowered.asm.mixin.transformer.ClassInfo;
 public class MixonPrePrePreLaunch {
     static {
         InstrumentationApi.retransform(ClassInfo.class, (final String name, final ClassNode klass) -> {
-            for (final MethodNode method : klass.methods) {
-                if (method.name.equals("hasSuperClass") && method.desc.equals("(Ljava/lang/String;Lorg/spongepowered/asm/mixin/transformer/ClassInfo$Traversal;)Z")) {
-                    final ListIterator<AbstractInsnNode> iterator = method.instructions.iterator();
-                    AbstractInsnNode node = iterator.next();
+            final MethodNode[] methods = klass.methods.toArray(new MethodNode[0]);
+            final int methodCount = methods.length;
+            MethodNode method;
+
+            for (int i = 0; i < methodCount; i++) {
+                if (methods[i].name.equals("hasSuperClass") && methods[i].desc.equals("(Ljava/lang/String;Lorg/spongepowered/asm/mixin/transformer/ClassInfo$Traversal;)Z")) {
+                    AbstractInsnNode node = (method = methods[i]).instructions.getFirst();
 
                     while (node != null) {
                         if (node.getOpcode() == Opcodes.IFEQ) {
@@ -39,7 +41,7 @@ public class MixonPrePrePreLaunch {
                             break;
                         }
 
-                        node = iterator.next();
+                        node = node.getNext();
                     }
                 }
             }

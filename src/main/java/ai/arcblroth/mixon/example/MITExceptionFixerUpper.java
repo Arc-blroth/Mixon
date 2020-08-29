@@ -3,6 +3,7 @@ package ai.arcblroth.mixon.example;
 import ai.arcblroth.mixon.api.LoaderModMetadataWrapper;
 import ai.arcblroth.mixon.api.MixonModInjector;
 import ai.arcblroth.mixon.api.PrePrePreLaunch;
+import net.fabricmc.loader.metadata.EntrypointMetadata;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,7 +11,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MITExceptionFixerUpper implements PrePrePreLaunch {
@@ -38,17 +41,11 @@ public class MITExceptionFixerUpper implements PrePrePreLaunch {
             if(metadata.getLicense().stream().anyMatch(s -> s.toLowerCase().equals("mit"))) {
                 return new LoaderModMetadataWrapper(metadata) {
                     @Override
-                    public Collection<String> getLicense() {
-                        return super.getLicense().stream()
-                                .map(s -> s.toLowerCase().equals("mit") ? "mit " : s)
-                                .collect(Collectors.toList());
-                    }
-                    @Override
-                    public String getDescription() {
+                    public List<EntrypointMetadata> getEntrypoints(String s) {
                         if(this.getId().equals("mitexception")) {
-                            return "try {\n" + super.getDescription() + "\n} catch (MITException e) {\n    // Mwahaha\n}";
+                            return new ArrayList<>();
                         } else {
-                            return super.getDescription();
+                            return super.getEntrypoints(s);
                         }
                     }
                 };

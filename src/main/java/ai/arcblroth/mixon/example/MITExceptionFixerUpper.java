@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class MITExceptionFixerUpper implements PrePrePreLaunch {
 
-    public static final boolean ENABLE = false;
+    public static final boolean ENABLE = true;
 
     @Override
     public void onPrePrePreLaunch() {

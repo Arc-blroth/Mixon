@@ -20,13 +20,14 @@
     ]
   },
 
-  "languageAdapters": {
-    "ai.arcblroth.mixon": "ai.arcblroth.mixon.MixonFauxLanguageAdapter"
-  },
-
   "depends": {
     "fabricloader": ">=0.7.8",
     "minecraft": "*"
-  }
+  },
 
+  "custom": {
+    "gfh:prePrePreLaunch": [
+      "ai.arcblroth.mixon.MixonPrePrePreLaunch"
+    ]
+  }
 }

@@ -1,6 +1,6 @@
-# Mixon
+# Mixon & Mixaround
 
-A dynamic mod injector and fabric.mod.json mixin system
+A dynamic mod injector and fabric.mod.json transformer system 
 
 # Usage
 

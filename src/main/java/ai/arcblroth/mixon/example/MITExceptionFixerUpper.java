@@ -48,6 +48,15 @@ public class MITExceptionFixerUpper implements PrePrePreLaunch {
                             return super.getEntrypoints(s);
                         }
                     }
+
+                    @Override
+                    public String getDescription() {
+                        if(this.getId().equals("mitexception")) {
+                            return "try {\n" + super.getDescription() + "\n} catch (MITException e) {\n    // Mwahaha\n}";
+                        } else {
+                            return super.getDescription();
+                        }
+                    }
                 };
             } else {
                 return metadata;

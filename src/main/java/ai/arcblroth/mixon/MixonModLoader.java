@@ -1,6 +1,7 @@
 package ai.arcblroth.mixon;
 
 import ai.arcblroth.mixon.api.PrePrePreLaunch;
+import net.devtech.grossfabrichacks.unsafe.UnsafeUtil;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.api.LanguageAdapter;
 import net.fabricmc.loader.api.ModContainer;
@@ -10,10 +11,14 @@ import net.fabricmc.loader.gui.FabricGuiEntry;
 import net.fabricmc.loader.launch.common.FabricLauncherBase;
 import net.fabricmc.loader.metadata.LoaderModMetadata;
 import net.fabricmc.loader.util.DefaultLanguageAdapter;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.misc.Unsafe;
 
+import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -26,7 +31,7 @@ public final class MixonModLoader {
     public static final MixonModLoader INSTANCE = new MixonModLoader();
     private List<BiFunction<String, LoaderModMetadata, LoaderModMetadata>> modMetadataTransformer;
     private List<URL> toBeInjected;
-    private List<String> originalModsUpToAndIncludingMixon;
+    private List<String> originalModsUpToAndIncludingGFH;
     private List<ModContainer> injectedMods;
     private int previousModListModcount;
 
@@ -77,9 +82,12 @@ public final class MixonModLoader {
         Field modCount = AbstractList.class.getDeclaredField("modCount");
         modCount.setAccessible(true);
         previousModListModcount = modCount.getInt(existingMods);
-        originalModsUpToAndIncludingMixon = new ArrayList<>();
-        originalModsUpToAndIncludingMixon.addAll(
-                existingMods.subList(0, existingMods.indexOf(loader.getModContainer("mixon").get()) + 1)
+
+        LOGGER.warn("Some scary-looking warnings may have been generated above, but Mixon and Minecraft should still work. You can ignore those warnings, as they're intended mainly for developers.");
+
+        originalModsUpToAndIncludingGFH = new ArrayList<>();
+        originalModsUpToAndIncludingGFH.addAll(
+                existingMods.subList(0, existingMods.indexOf(loader.getModContainer("grossfabrichacks").get()) + 1)
                 .stream()
                 .map(c -> c.getInfo().getId())
                 .collect(Collectors.toSet())
@@ -105,7 +113,7 @@ public final class MixonModLoader {
 
         injectedMods = new ArrayList<>();
 
-        for(String originalModId : originalModsUpToAndIncludingMixon) {
+        for(String originalModId : originalModsUpToAndIncludingGFH) {
             ModCandidate candidate = candidateMap.get(originalModId);
             if(candidate != null) {
                 MixonFabricLoaderAccessor.addMod(loader, candidate);
@@ -120,7 +128,7 @@ public final class MixonModLoader {
         }
 
         for(ModCandidate candidate : candidateMap.values()) {
-            if(!originalModsUpToAndIncludingMixon.contains(candidate.getInfo().getId())) {
+            if(!originalModsUpToAndIncludingGFH.contains(candidate.getInfo().getId())) {
                 MixonFabricLoaderAccessor.addMod(loader, candidate);
                 if (candidate.getInfo().loadsInEnvironment(loader.getEnvironmentType())) {
                     injectedMods.add(loader.getModContainer(candidate.getInfo().getId()).orElseThrow(() -> new ModResolutionException("Added mod doesn't exist?")));
@@ -163,7 +171,7 @@ public final class MixonModLoader {
         adapterMap.clear();
         adapterMap.put("default", DefaultLanguageAdapter.INSTANCE);
 
-        for(String modId : originalModsUpToAndIncludingMixon) {
+        for(String modId : originalModsUpToAndIncludingGFH) {
             net.fabricmc.loader.ModContainer mod = modMap.get(modId);
             for(Map.Entry<String, String> laEntry : mod.getInfo().getLanguageAdapterDefinitions().entrySet()) {
                 if (adapterMap.containsKey(laEntry.getKey())) {

@@ -1,6 +1,7 @@
 package ai.arcblroth.mixon;
 
 import net.devtech.grossfabrichacks.instrumentation.InstrumentationApi;
+import net.devtech.grossfabrichacks.unsafe.UnsafeUtil;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -15,6 +16,15 @@ import org.spongepowered.asm.mixin.transformer.ClassInfo;
 
 public class MixonPrePrePreLaunch {
     static {
+        setupMixon();
+        setupMixaround();
+    }
+
+    private static void setupMixon() {
+        MixonModLoader.INSTANCE.onPrePrePreLaunch();
+    }
+
+    private static void setupMixaround() {
         InstrumentationApi.retransform(ClassInfo.class, (final String name, final ClassNode klass) -> {
             final MethodNode[] methods = klass.methods.toArray(new MethodNode[0]);
             final int methodCount = methods.length;
@@ -47,4 +57,5 @@ public class MixonPrePrePreLaunch {
             }
         });
     }
+
 }
